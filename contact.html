@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Contact | Your Eco Scrap</title><link rel="stylesheet" href="styles.css"></head>
+<body>
+<header class="site-header"><div class="container nav-wrap"><a class="logo" href="index.html"><span>YOUR</span> ECO SCRAP</a><button class="menu-toggle">☰</button><nav class="nav"><a href="index.html">Home</a><a href="about.html">About Us</a><a href="products.html">Products</a><a class="active" href="contact.html">Contact</a><a class="nav-cta" href="contact.html">Get a Quote</a></nav></div></header>
+<section class="page-hero"><div class="container"><p class="eyebrow">CONTACT US</p><h1>Let's Talk About Your Requirement</h1><p>Tell us what material you have or what you need to source.</p></div></section>
+<section class="section"><div class="container contact-grid"><div><p class="eyebrow">GET IN TOUCH</p><h2>We're here to <span>help</span></h2><div class="contact-item"><strong>Office</strong><p>123 Industrial Parkway<br>Dallas-Fort Worth, Texas, USA</p></div><div class="contact-item"><strong>Email</strong><p>joyroy123897@gmail.com</p></div><div class="contact-item"><strong>Phone</strong><p>+1 (817) 555-0199</p></div></div><form id="contactForm" class="contact-form">
+<input required name="name" placeholder="Full Name">
+<input required type="email" name="email" placeholder="Email Address">
+<input name="phone" placeholder="Phone Number">
+<select name="product"><option value="">Product / Material</option><option>HMS – Heavy Melting Scrap</option><option>Aluminum Ingots</option><option>Aluminum Wheels</option><option>Aluminum Engine Blocks</option><option>Aluminum Wire</option><option>UBC Cans</option><option>Billets</option><option>Blooms</option><option>Other</option></select>
+<input name="quantity" placeholder="Quantity / Tons">
+<textarea required name="message" rows="7" placeholder="Tell us about your material or requirement"></textarea>
+<button class="btn btn-primary" id="submitBtn" type="submit">Send Message</button>
+<p id="formMessage" class="form-message"></p>
+</form></div></section>
+<footer><div class="container footer-grid"><div><a class="logo footer-logo" href="index.html"><span>YOUR</span> ECO SCRAP</a><p>Sustainable metal recycling, processing and industrial material solutions.</p></div><div><h4>Quick Links</h4><a href="index.html">Home</a><a href="about.html">About Us</a><a href="products.html">Products</a></div><div><h4>Contact</h4><p>123 Industrial Parkway<br>Dallas-Fort Worth, Texas, USA</p><p>joyroy123897@gmail.com<br>+1 (817) 555-0199</p></div></div><div class="copyright">© 2026 GreenCore Recycling LLC. All rights reserved.</div></footer><script>
+const form=document.getElementById("contactForm");
+if(form){
+  const button=document.getElementById("submitBtn");
+  const status=document.getElementById("formMessage");
+  form.addEventListener("submit", async (e)=>{
+    e.preventDefault();
+    button.disabled=true;
+    status.textContent="Sending your message...";
+    status.style.color="";
+    try{
+      const payload=Object.fromEntries(new FormData(form).entries());
+      const response=await fetch("/api/contact",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(payload)
+      });
+      const result=await response.json();
+      if(!response.ok) throw new Error(result.message||"Unable to send your message.");
+      status.textContent=result.message;
+      status.style.color="#179447";
+      form.reset();
+    }catch(error){
+      status.textContent=error.message;
+      status.style.color="#b42318";
+    }finally{
+      button.disabled=false;
+    }
+  });
+}
+</script>
+<script src="script.js"></script></body></html>
